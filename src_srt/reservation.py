@@ -10,10 +10,10 @@ TELEGRAM_TOKEN = "6041435620:AAH-C98ovxjuHmKOFbDM7z-Y8lI88YK1UT4"
 TELEGRAM_CHATID = "6055095538"
 
 srt = SRT("2287599141", "eoaoWkd1!") #
-dep = '대전'
-arr = '수서'
-date = '20250302' # 날짜 (yyyymmdd)
-tr_time = '213000' # 시간 (HHMMSS)
+dep = '수서'
+arr = '부산'
+date = '20250510' # 날짜 (yyyymmdd)
+tr_time = '080000' # 시간 (HHMMSS)
 
 # 기차 검색
 trains = srt.search_train(dep, arr, date, tr_time, available_only=False)
@@ -31,13 +31,15 @@ while flag == False:
     try:
         i += 1
         trains = srt.search_train(dep, arr, date, tr_time, available_only=False)
-        time.sleep(randint(1, 5))
+        time.sleep(randint(0, 2))
         print(f"{i}번째 시도")
         # reservation = srt.reserve(trains[train_num], passengers=[Disability4To6(), Adult()], special_seat=SeatType.GENERAL_ONLY)
-        reservation = srt.reserve(trains[train_num], special_seat=SeatType.GENERAL_ONLY)
+        # reservation = srt.reserve(trains[train_num], passengers=[Adult(), Adult()], special_seat=SeatType.GENERAL_ONLY)
+        reservation = srt.reserve(trains[train_num], passengers=[Adult()], special_seat=SeatType.GENERAL_ONLY)
         # reservation = srt.reserve(trains[train_num], passengers=[Disability4To6()], special_seat=SeatType.GENERAL_ONLY)
         print(reservation)
-        asyncio.run(telegram.bot.send_message(chat_id = TELEGRAM_CHATID, text=f"[SRT] 예약 완료!\n{reservation}"))
+        bot = telegram.Bot(token=TELEGRAM_TOKEN)
+        asyncio.run(bot.send_message(chat_id=TELEGRAM_CHATID, text=f"[SRT] 예약 완료!\n{reservation}"))
         flag = True
         
     except:
